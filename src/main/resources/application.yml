@@ -6,7 +6,7 @@ micronaut:
 
 datasources:
     default:
-      url: jdbc:postgresql://localhost:5432/contabanco
+      url: jdbc:postgresql://localhost:5432/conta-postgres-1
       driverClassName: org.postgresql.Driver
       username: postgres
       password: 1234
