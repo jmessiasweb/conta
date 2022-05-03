@@ -8,8 +8,8 @@ import io.micronaut.data.jpa.repository.JpaRepository
 import java.util.*
 
 @Repository
-interface CienteRepository: JpaRepository<Cliente, Int> {
+interface ClienteRepository: JpaRepository<Cliente, Int> {
 
     @Query(value = "SELECT * FROM cliente WHERE nome_cliente = :nome", nativeQuery = true)
-    fun buscaClientePorNome(@Parameter("nome") nome: String): Optional<Cliente>
+    fun buscarClientePorNome(@Parameter("nome") nome: String): Optional<Cliente>
 }
