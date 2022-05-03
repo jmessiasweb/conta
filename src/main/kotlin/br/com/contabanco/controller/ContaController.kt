@@ -2,10 +2,10 @@ package br.com.contabanco.controller
 
 import br.com.contabanco.dto.ContaDTO
 import br.com.contabanco.model.Conta
-import io.micronaut.http.HttpResponse.created
+import br.com.contabanco.service.ContaService
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.*
-import java.net.http.HttpResponse
 
 @Controller
 class ContaController(val service: ContaService) {
@@ -16,8 +16,8 @@ class ContaController(val service: ContaService) {
     }
 
     @Get("/conta/saldo")
-    fun buscaSaldoConta(@QueryValue("codigo_conta") codigoConta: Int): Float {
-        return service.consultaSaldoConta(codigoConta)
+    fun buscarSaldoConta(@QueryValue("codigo_conta") codigoConta: Int): Float {
+        return service.consultarSaldoConta(codigoConta)
     }
 
     @Post("/conta")
@@ -33,12 +33,12 @@ class ContaController(val service: ContaService) {
 
     @Patch("/conta/credito")
     fun creditarConta(@QueryValue("codigo_conta") codigoConta: Int, @QueryValue("valor_credito")
-                      valor_credito: Float): HttpResponse<Map<String, String?>> {
+                      valor_credito: Float):HttpResponse<Map<String, String?>> {
         return service.creditarConta(codigoConta, valor_credito)
     }
 
     @Delete("/conta")
-    fun apagaConta(@QueryValue(value = "codigo_conta") idConta: Int): HttpResponse<Map<String, String?>> {
+    fun apagarConta(@QueryValue(value = "codigo_conta") idConta: Int): HttpResponse<Map<String, String?>> {
         return service.apagaConta(idConta)
     }
 }

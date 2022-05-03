@@ -2,21 +2,22 @@ package br.com.contabanco.controller
 
 import br.com.contabanco.model.Cliente
 import br.com.contabanco.service.ClienteService
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
-import java.net.http.HttpResponse
+
 
 @Controller
 class ClienteController(val service: ClienteService) {
 
     @Get("/cliente")
-    fun buscaCliente(@QueryValue("nome") nome: String): HttpResponse<Cliente> {
-        return service.buscaClientePorNome(nome)
+    fun buscarCliente(@QueryValue("nome") nome: String): HttpResponse<Cliente> {
+        return service.buscarClientePorNome(nome)
     }
 
     @Get("/clientes")
-    fun buscaCliente(): HttpResponse<List<Cliente>> {
-        return service.buscaTodosCliente()
+    fun buscarClientes(): HttpResponse<List<Cliente>> {
+        return service.buscarTodosClientes()
 
     }
 
