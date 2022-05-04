@@ -24,4 +24,9 @@ data class Conta(
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Cliente::class)
     @JoinColumn(name = "codigo_cliente")
     val codigoCliente: Cliente?
-)
+) {
+    @javax.persistence.Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    open var id: Long? = null
+}

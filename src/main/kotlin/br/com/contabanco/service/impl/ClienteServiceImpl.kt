@@ -34,7 +34,24 @@ class ClienteServiceImpl(private val repository: ClienteRepository) : ClienteSer
     }
 
     override fun novoCliente(cliente: Cliente): HttpResponse<Map<String, String?>> {
-        TODO("Not yet implemented")
+        try {
+            val novoCliente = repository.save(cliente)
+            return HttpResponse.created(
+                mapOf(
+                    "resposta" to "Cliente criado com sucesso!", "codigo_Cliente" to
+                            novoCliente.codigoCliente.toString(), "nome_Cliente" to novoCliente.nomeCliente.toString(),
+                    "cpf_Cliente" to novoCliente.cpfCliente.toString()
+                )
+            )
+        } catch (e: Exception) {
+            log.error("Cliente ja existe")
+            return HttpResponse.badRequest(
+                mapOf(
+                    "resposta" to "Cliente ja cadastrado na base!",
+                    "cpf" to cliente.cpfCliente
+                )
+            )
+        }
     }
 
     override fun atualizaCliente(
@@ -42,11 +59,52 @@ class ClienteServiceImpl(private val repository: ClienteRepository) : ClienteSer
         novoNome: String?,
         novoCpf: String?
     ): HttpResponse<Map<String, String?>> {
-        TODO("Not yet implemented")
+        val cliente = repository.findById(idCliente)
+        if (cliente.isPresent) {
+            log.info("Pesquisa realizada com sucesso. {}", cliente)
+            when {
+                novoNome != null && novoCpf == null -> {
+                    val novoCliente = Cliente(cliente.get().codigoCliente, novoNome, cliente.get().cpfCliente)
+                    val clienteAtualizado = repository.update(novoCliente)
+                    log.info("Nome alterado com sucesso")
+                    return HttpResponse.ok(
+                        mapOf(
+                            "resposta" to "Cliente atualizado com sucesso",
+                            "nome_cliente_atualizado" to clienteAtualizado.nomeCliente
+                        )
+                    )
+                }
+                novoNome != null && novoCpf != null -> {
+                    val novoCliente = Cliente(idCliente, novoNome, novoCpf)
+                    val clienteAtualizado = repository.update(novoCliente)
+                    log.info("Nome e CPF alterados com sucesso")
+                    return HttpResponse.ok(
+                        mapOf(
+                            "resposta" to "Cliente atualizado com sucesso!",
+                            "cpf_atualizado" to clienteAtualizado.cpfCliente, "nome_cliente_atualizado" to
+                                    clienteAtualizado.nomeCliente
+                        )
+                    )
+                } else -> {
+                    log.error("Valores de Atualização não informado")
+                return HttpResponse.status(HttpStatus.NOT_FOUND, "VALORES de ATUALIZAÇÃO não INFORMADO")
+                }
+            }
+        }else {
+            log.error("Cliente não encontrado na base: {}", idCliente)
+            return HttpResponse.status(HttpStatus.NOT_FOUND, "CLIENTE NÃO ENCONTRADO")
+        }
     }
 
     override fun apagaCliente(idCliente: Int): HttpResponse<Map<String, String?>> {
-        TODO("Not yet implemented")
+        try {
+            validaItem(idCliente)
+            repository.deleteById(idCliente)
+            return HttpResponse.ok(mapOf("resposta" to "Cliente deletado com sucesso"))
+        } catch (e: Exception) {
+            log.error("Cliente inexistente")
+            return HttpResponse.badRequest(mapOf("resposta" to "Cliente deletado com sucesso!"))
+        }
     }
 
     private fun validaItem(idCliente: Int): Cliente? {
