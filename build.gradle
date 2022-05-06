@@ -31,10 +31,10 @@ dependencies {
     runtimeOnly("org.apache.logging.log4j:log4j-api:2.17.2")
     runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.17.2")
     implementation("io.micronaut:micronaut-validation")
+    testImplementation("org.mockito:mockito-core")
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-
-    testImplementation("org.mockito:mockito-core")
+    runtimeOnly("ch.qos.logback:logback-classic")
 
 }
 
